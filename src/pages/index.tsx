@@ -1,11 +1,14 @@
-import React from 'react'
+import React from "react";
+import Layout from "@/components/layouts/Layout";
 
-type Props = {}
+type Props = {};
 
-const index = (props: Props) => {
+const index = ({}: Props) => {
   return (
-    <div>index</div>
-  )
-}
+    <Layout>
+      <div>index</div>
+    </Layout>
+  );
+};
 
-export default index
+export default index;
