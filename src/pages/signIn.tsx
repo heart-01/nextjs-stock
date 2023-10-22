@@ -3,6 +3,7 @@ import { createGlobalStyle } from "styled-components";
 import { Formik, Form, Field, FormikProps } from "formik";
 import { Box, Button, Card, CardContent, CardMedia, TextField } from "@mui/material";
 import { useRouter } from "next/router";
+import { useAppDispatch } from "src/redux/store";
 
 const GlobalStyle = createGlobalStyle`
   body {
@@ -18,6 +19,7 @@ const GlobalStyle = createGlobalStyle`
 type Props = {};
 
 const signIn = ({}: Props) => {
+  const dispatch = useAppDispatch();
   const router = useRouter();
 
   const showForm = ({ values, setFieldValue, isValid, dirty, handleSubmit }: FormikProps<any>) => {
