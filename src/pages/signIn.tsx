@@ -1,9 +1,11 @@
 import React from "react";
 import { createGlobalStyle } from "styled-components";
 import { Formik, Form, Field, FormikProps } from "formik";
-import { Box, Button, Card, CardContent, CardMedia, TextField } from "@mui/material";
+import { TextField } from "formik-material-ui";
+import { Box, Button, Card, CardContent, CardMedia } from "@mui/material";
 import { useRouter } from "next/router";
 import { useAppDispatch } from "src/redux/store";
+import { signIn } from "@/store/slices/userSlice";
 
 const GlobalStyle = createGlobalStyle`
   body {
@@ -18,7 +20,7 @@ const GlobalStyle = createGlobalStyle`
 
 type Props = {};
 
-const signIn = ({}: Props) => {
+const SignIn = ({}: Props) => {
   const dispatch = useAppDispatch();
   const router = useRouter();
 
@@ -55,7 +57,10 @@ const signIn = ({}: Props) => {
             <Formik
               initialValues={{ username: "", password: "" }}
               onSubmit={async (values) => {
-                alert(JSON.stringify(values));
+                const response = await dispatch(signIn(values));
+                if (signIn.fulfilled.match(response)) {
+                  alert("Login success");
+                }
               }}
             >
               {(props) => showForm(props)}
@@ -67,4 +72,4 @@ const signIn = ({}: Props) => {
   );
 };
 
-export default signIn;
+export default SignIn;

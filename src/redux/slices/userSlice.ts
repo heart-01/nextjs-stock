@@ -1,36 +1,46 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "@/store/store";
+import { signInParams, signUpParams, userInfo, authService } from "@/services/authenticationAPI";
+import axios from "src/libs/axios";
+import { isEmpty } from "lodash";
 
 interface IUserState {
-  username: string;
-  accessToken: string;
-  error?: string;
+  username?: string;
+  user?: userInfo;
+  error?: { code: string; message: string };
   isAuthenticated: boolean;
   isAuthenticating: boolean;
-  user?: {
-    username: string;
-    firstname: string;
-    lastname: string;
-    email: string;
-    image: string;
-    token?: string;
-  };
 }
 
 // config initial state
 const initialState: IUserState = {
-  username: "",
-  accessToken: "",
+  username: undefined,
+  user: undefined,
   error: undefined,
   isAuthenticated: false,
   isAuthenticating: true,
-  user: undefined,
 };
 
 // config async actions
-export const signUp = createAsyncThunk("user/signup", async (user: { name: string; email: string; username: string; password: string }) => {
-  const response = new Promise((res) => setTimeout(() => res({ data: user }), 3000));
-  return await response;
+export const signUp = createAsyncThunk("user/signUp", async (user: signUpParams) => {
+  return await authService.signUp(user);
+});
+
+export const signIn = createAsyncThunk("user/signIn", async (user: signInParams) => {
+  const response = await authService.signIn(user);
+  if (isEmpty(response.data.token)) {
+    throw new Error("signin failed");
+  }
+
+  // set access token
+  axios.interceptors.request.use((config) => {
+    if (config && config.headers) {
+      config.headers["Authorization"] = `Bearer ${response.data.token}`;
+    }
+    return config;
+  });
+
+  return response;
 });
 
 const userSlice = createSlice({
@@ -41,17 +51,55 @@ const userSlice = createSlice({
       state.username = action.payload.username;
     },
     clearUser: (state: IUserState, action) => {
-      state.username = "";
-      state.accessToken = "";
+      state.username = undefined;
+      state.user = undefined;
       state.error = undefined;
       state.isAuthenticated = false;
       state.isAuthenticating = false;
-      state.user = undefined;
     },
   },
   extraReducers: (builder) => {
-    builder.addCase(signUp.fulfilled, (state: IUserState, action: any) => {
+    builder.addCase(signUp.fulfilled, (state: IUserState, action) => {
+      state.username = action.payload.username;
+      state.user = {
+        name: action.payload.name,
+        email: action.payload.email,
+        username: action.payload.username,
+        role: action.payload.role,
+        token: action.payload.token,
+        refreshToken: action.payload.refreshToken,
+      };
+      state.error = undefined;
+      state.isAuthenticated = true;
+      state.isAuthenticating = false;
+    });
+    builder.addCase(signUp.rejected, (state: IUserState, action) => {
+      state.username = undefined;
+      state.user = undefined;
+      state.error = { code: action.error.code || "500", message: action.error.message || "Internal Server Error" };
+      state.isAuthenticated = false;
+      state.isAuthenticating = false;
+    });
+    builder.addCase(signIn.fulfilled, (state: IUserState, action: any) => {
       state.username = action.payload.data.username;
+      state.user = {
+        name: action.payload.data.name,
+        email: action.payload.data.email,
+        username: action.payload.data.username,
+        role: action.payload.data.role,
+        token: action.payload.data.token,
+        refreshToken: action.payload.data.refreshToken,
+      };
+      state.error = undefined;
+      state.isAuthenticated = true;
+      state.isAuthenticating = false;
+    });
+    builder.addCase(signIn.rejected, (state: IUserState, action) => {
+      state.username = undefined;
+      state.user = undefined;
+      state.error = { code: action.error.code || "500", message: action.error.message || "Internal Server Error" };
+      state.isAuthenticated = false;
+      state.isAuthenticating = false;
     });
   },
 });

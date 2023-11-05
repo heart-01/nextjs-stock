@@ -1,8 +1,11 @@
 import React from "react";
 import { createGlobalStyle } from "styled-components";
 import { Formik, Form, Field, FormikProps } from "formik";
-import { Box, Button, Card, CardContent, CardMedia, TextField } from "@mui/material";
+import { TextField } from "formik-material-ui";
+import { Box, Button, Card, CardContent, CardMedia } from "@mui/material";
 import { useRouter } from "next/router";
+import { useAppDispatch } from "@/store/store";
+import { signUp } from "@/store/slices/userSlice";
 
 const GlobalStyle = createGlobalStyle`
   body {
@@ -17,7 +20,8 @@ const GlobalStyle = createGlobalStyle`
 
 type Props = {};
 
-const signUp = ({}: Props) => {
+const SignUp = ({}: Props) => {
+  const dispatch = useAppDispatch();
   const router = useRouter();
 
   const showForm = ({ values, setFieldValue, isValid, dirty, handleSubmit }: FormikProps<any>) => {
@@ -53,9 +57,12 @@ const signUp = ({}: Props) => {
           <CardMedia sx={{ height: 300 }} image="/static/img/signup.jpeg" title="Contemplative Reptile" />
           <CardContent>
             <Formik
-              initialValues={{ username: "", password: "" }}
+              initialValues={{ name: "", email: "", username: "", password: "" }}
               onSubmit={async (values) => {
-                alert(JSON.stringify(values));
+                const response = await dispatch(signUp(values));
+                if (signUp.fulfilled.match(response)) {
+                  router.push("/signIn");
+                }
               }}
             >
               {(props) => showForm(props)}
@@ -67,7 +74,7 @@ const signUp = ({}: Props) => {
   );
 };
 
-export default signUp;
+export default SignUp;
 
 /* HTML Form integrated with Formik
 <Formik
