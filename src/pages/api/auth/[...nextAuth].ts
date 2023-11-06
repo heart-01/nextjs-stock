@@ -23,22 +23,14 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
     const response = await axios.post("/auth/signin", req.body);
 
     // set token to cookie
-    const { token } = response.data;
-    setCookie(res, ACCESS_TOKEN_KEY, token, {
+    const { token, refreshToken } = response.data;
+    setCookie(res, [ACCESS_TOKEN_KEY, REFRESH_TOKEN_KEY], [token, refreshToken], {
       httpOnly: true,
       secure: process.env.NODE_ENV !== "development",
       sameSite: "strict",
       path: "/",
     });
-
-    const { refreshToken } = response.data;
-    setCookie(res, REFRESH_TOKEN_KEY, refreshToken, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV !== "development",
-      sameSite: "strict",
-      path: "/",
-    });
-
+    
     res.json(response.data);
   } catch (error: any) {
     res.status(401).json({ error: error.message });

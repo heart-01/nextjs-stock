@@ -59,7 +59,7 @@ const SignIn = ({}: Props) => {
               onSubmit={async (values) => {
                 const response = await dispatch(signIn(values));
                 if (signIn.fulfilled.match(response)) {
-                  alert("Login success");
+                  router.push("/stock")
                 }
               }}
             >

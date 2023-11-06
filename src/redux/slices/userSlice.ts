@@ -80,7 +80,7 @@ const userSlice = createSlice({
       state.isAuthenticated = false;
       state.isAuthenticating = false;
     });
-    builder.addCase(signIn.fulfilled, (state: IUserState, action: any) => {
+    builder.addCase(signIn.fulfilled, (state: IUserState, action) => {
       state.username = action.payload.data.username;
       state.user = {
         name: action.payload.data.name,

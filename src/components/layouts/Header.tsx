@@ -5,6 +5,9 @@ import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
+import { Badge, Box, Menu, MenuItem } from "@mui/material";
+import { Mail, Notifications, AccountCircle } from "@mui/icons-material";
+import { useAppDispatch } from "@/store/store";
 
 const drawerWidth = 240;
 
@@ -36,6 +39,13 @@ type HeaderProps = {
 };
 
 const Header = ({ open, onDrawerOpen }: HeaderProps) => {
+  const [showProfileMenu, setShowProfileMenu] = React.useState(false);
+  const dispatch = useAppDispatch();
+
+  const handleCloseMenu = () => {
+    setShowProfileMenu(false);
+  };
+
   return (
     <AppBar position="fixed" open={open}>
       <Toolbar>
@@ -54,6 +64,41 @@ const Header = ({ open, onDrawerOpen }: HeaderProps) => {
         <Typography variant="h6" noWrap component="div">
           NextJS Stock
         </Typography>
+
+        <Box sx={{ flexGrow: 1 }} />
+
+        <Box sx={{ display: { xs: "none", md: "flex" } }}>
+          <IconButton size="large" aria-label="show 4 new mails" color="inherit">
+            <Badge badgeContent={4} color="error">
+              <Mail />
+            </Badge>
+          </IconButton>
+          <IconButton size="large" aria-label="show 17 new notifications" color="inherit">
+            <Badge badgeContent={17} color="error">
+              <Notifications />
+            </Badge>
+          </IconButton>
+          <IconButton size="large" aria-label="account of current user" aria-haspopup="true" color="inherit" onClick={() => setShowProfileMenu(!showProfileMenu)}>
+            <AccountCircle />
+          </IconButton>
+
+          <Menu
+            anchorOrigin={{
+              vertical: "top",
+              horizontal: "right",
+            }}
+            keepMounted
+            transformOrigin={{
+              vertical: "top",
+              horizontal: "right",
+            }}
+            open={showProfileMenu}
+            onClose={handleCloseMenu}
+          >
+            <MenuItem>Logout</MenuItem>
+            <MenuItem onClick={handleCloseMenu}>My account</MenuItem>
+          </Menu>
+        </Box>
       </Toolbar>
     </AppBar>
   );

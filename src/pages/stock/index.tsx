@@ -1,11 +1,20 @@
-import React from 'react'
+import React from "react";
+import Layout from "@/components/layouts/Layout";
+import { useSelector } from "react-redux";
+import { setTestUser, clearUser, signUp, userSelector } from "@/store/slices/userSlice";
+import { useAppDispatch } from "@/store/store";
 
-type Props = {}
+type Props = {};
 
-const index = (props: Props) => {
+const Index = ({}: Props) => {
+  const user = useSelector(userSelector);
+  const dispatch = useAppDispatch();
+
   return (
-    <div>index</div>
-  )
-}
+    <Layout>
+      <div>{user.username}</div>
+    </Layout>
+  );
+};
 
-export default index
+export default Index;
