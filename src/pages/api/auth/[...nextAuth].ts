@@ -2,8 +2,9 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import { requestMethodEnum } from "@/enums/requestMethodEnum";
 import { get } from "lodash";
 import axios from "@/libs/axios";
-import { setCookie } from "@/utils/cookiesUtil";
+import { clearCookie, setCookie } from "@/utils/cookiesUtil";
 import { ACCESS_TOKEN_KEY, REFRESH_TOKEN_KEY } from "@/constants/cookies";
+import { clear } from "console";
 
 export default function handler(req: NextApiRequest, res: NextApiResponse) {
   const action = get(req.query, "nextAuth[0]");
@@ -38,7 +39,8 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
 }
 
 function signOut(req: NextApiRequest, res: NextApiResponse) {
-  return res.end(`SignOut`);
+  clearCookie(res, [ACCESS_TOKEN_KEY, REFRESH_TOKEN_KEY]);
+  res.json({ success: true });
 }
 
 function getSession(req: NextApiRequest, res: NextApiResponse) {

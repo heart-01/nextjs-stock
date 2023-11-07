@@ -8,6 +8,8 @@ import MenuIcon from "@mui/icons-material/Menu";
 import { Badge, Box, Menu, MenuItem } from "@mui/material";
 import { Mail, Notifications, AccountCircle } from "@mui/icons-material";
 import { useAppDispatch } from "@/store/store";
+import { signOut } from "@/store/slices/userSlice";
+import { useRouter } from "next/router";
 
 const drawerWidth = 240;
 
@@ -39,11 +41,17 @@ type HeaderProps = {
 };
 
 const Header = ({ open, onDrawerOpen }: HeaderProps) => {
-  const [showProfileMenu, setShowProfileMenu] = React.useState(false);
+  const router = useRouter();
   const dispatch = useAppDispatch();
+  const [showProfileMenu, setShowProfileMenu] = React.useState(false);
 
   const handleCloseMenu = () => {
     setShowProfileMenu(false);
+  };
+
+  const handleOnClickSignOut = () => {
+    dispatch(signOut());
+    router.push("/signIn")
   };
 
   return (
@@ -95,7 +103,7 @@ const Header = ({ open, onDrawerOpen }: HeaderProps) => {
             open={showProfileMenu}
             onClose={handleCloseMenu}
           >
-            <MenuItem>Logout</MenuItem>
+            <MenuItem onClick={handleOnClickSignOut}>Logout</MenuItem>
             <MenuItem onClick={handleCloseMenu}>My account</MenuItem>
           </Menu>
         </Box>

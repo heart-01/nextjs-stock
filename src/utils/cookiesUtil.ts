@@ -21,6 +21,10 @@ export const setCookie = (res: NextApiResponse, name: string | Array<string>, va
   );
 };
 
-export const clearCookie = (res: NextApiResponse, name: string, path = "/") => {
-  res.setHeader("Set-Cookie", serialize(name, "", { maxAge: 0, path }));
+export const clearCookie = (res: NextApiResponse, name: string | Array<string>, path = "/") => {
+  const nameCookie = isArray(name) ? name : [name];
+  res.setHeader(
+    "Set-Cookie",
+    nameCookie.map((name, i) => serialize(name, "", { maxAge: 0, path }))
+  );
 };

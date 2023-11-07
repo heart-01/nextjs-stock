@@ -20,7 +20,12 @@ const signIn = async (user: signInParams) => {
   return await axios.post("/auth/signin", user, { baseURL: process.env.NEXT_PUBLIC_BASE_URL_LOCAL_API });
 };
 
+const signOut = async () => {
+  return await axios.get("/auth/signout", { baseURL: process.env.NEXT_PUBLIC_BASE_URL_LOCAL_API });
+};
+
 export const authService = {
   signUp,
   signIn,
+  signOut,
 };

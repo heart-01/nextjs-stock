@@ -43,6 +43,10 @@ export const signIn = createAsyncThunk("user/signIn", async (user: signInParams)
   return response;
 });
 
+export const signOut = createAsyncThunk("user/signOut", async () => {
+  await authService.signOut();
+});
+
 const userSlice = createSlice({
   name: "user",
   initialState,
@@ -100,6 +104,13 @@ const userSlice = createSlice({
       state.error = { code: action.error.code || "500", message: action.error.message || "Internal Server Error" };
       state.isAuthenticated = false;
       state.isAuthenticating = false;
+    });
+    builder.addCase(signOut.fulfilled, (state: IUserState, action) => {
+      state.username = undefined;
+      state.user = undefined;
+      state.error = undefined
+      state.isAuthenticated = false;
+      state.isAuthenticating = true;
     });
   },
 });
