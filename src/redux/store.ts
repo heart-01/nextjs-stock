@@ -10,6 +10,10 @@ const reducer = {
 export const store = configureStore({
   reducer,
   devTools: process.env.NODE_ENV !== "production",
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: false, // Disable serializable check
+    }),
 });
 
 // export type of root state from reducers

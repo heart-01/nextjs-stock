@@ -6,6 +6,7 @@ import { Box, Button, Card, CardContent, CardMedia } from "@mui/material";
 import { useRouter } from "next/router";
 import { useAppDispatch } from "src/redux/store";
 import { signIn } from "@/store/slices/userSlice";
+import withAuth from "@/hoc/withAuth";
 
 const GlobalStyle = createGlobalStyle`
   body {
@@ -59,7 +60,7 @@ const SignIn = ({}: Props) => {
               onSubmit={async (values) => {
                 const response = await dispatch(signIn(values));
                 if (signIn.fulfilled.match(response)) {
-                  router.push("/stock")
+                  router.push("/stock");
                 }
               }}
             >
@@ -72,4 +73,4 @@ const SignIn = ({}: Props) => {
   );
 };
 
-export default SignIn;
+export default withAuth(SignIn);

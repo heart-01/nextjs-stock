@@ -3,13 +3,14 @@ import { RootState } from "@/store/store";
 import { signInParams, signUpParams, userInfo, authService } from "@/services/authenticationAPI";
 import axios from "src/libs/axios";
 import { isEmpty } from "lodash";
+import { AxiosRequestConfig } from "axios";
 
 interface IUserState {
   username?: string;
   user?: userInfo;
   error?: { code: string; message: string };
-  isAuthenticated: boolean;
-  isAuthenticating: boolean;
+  isAuthenticated: boolean; // ใช้เช็คว่าเป็น user ที่ login หรือไม่
+  isAuthenticating: boolean; // ใช้ในกรณีเปิดแอพแล้วยังไม่รู้สถานะตัวเองว่า login หรือไม่ login
 }
 
 // config initial state
@@ -33,7 +34,7 @@ export const signIn = createAsyncThunk("user/signIn", async (user: signInParams)
   }
 
   // set access token
-  axios.interceptors.request.use((config) => {
+  axios.interceptors.request.use((config?: AxiosRequestConfig | any) => {
     if (config && config.headers) {
       config.headers["Authorization"] = `Bearer ${response.data.token}`;
     }
@@ -45,6 +46,21 @@ export const signIn = createAsyncThunk("user/signIn", async (user: signInParams)
 
 export const signOut = createAsyncThunk("user/signOut", async () => {
   await authService.signOut();
+});
+
+export const getSession = createAsyncThunk("user/fetchSession", async () => {
+  const response = await authService.getSession();
+
+  // set access token
+  if (response) {
+    axios.interceptors.request.use((config?: AxiosRequestConfig | any) => {
+      if (config && config.headers) {
+        config.headers["Authorization"] = `Bearer ${response.data.token}`;
+      }
+      return config;
+    });
+  }
+  return response;
 });
 
 const userSlice = createSlice({
@@ -108,9 +124,23 @@ const userSlice = createSlice({
     builder.addCase(signOut.fulfilled, (state: IUserState, action) => {
       state.username = undefined;
       state.user = undefined;
-      state.error = undefined
+      state.error = undefined;
       state.isAuthenticated = false;
-      state.isAuthenticating = true;
+      state.isAuthenticating = false;
+    });
+    builder.addCase(getSession.fulfilled, (state, action) => {
+      if (action.payload && action.payload.data.token) {
+        state.user = {
+          name: action.payload.data.name,
+          email: action.payload.data.email,
+          username: action.payload.data.username,
+          role: action.payload.data.role,
+          token: action.payload.data.token,
+          refreshToken: action.payload.data.refreshToken,
+        };
+        state.isAuthenticated = true;
+        state.isAuthenticating = false;
+      }
     });
   },
 });

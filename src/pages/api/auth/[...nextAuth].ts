@@ -2,9 +2,9 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import { requestMethodEnum } from "@/enums/requestMethodEnum";
 import { get } from "lodash";
 import axios from "@/libs/axios";
+import cookie from "cookie";
 import { clearCookie, setCookie } from "@/utils/cookiesUtil";
 import { ACCESS_TOKEN_KEY, REFRESH_TOKEN_KEY } from "@/constants/cookies";
-import { clear } from "console";
 
 export default function handler(req: NextApiRequest, res: NextApiResponse) {
   const action = get(req.query, "nextAuth[0]");
@@ -19,7 +19,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
   }
 }
 
- const signIn = async (req: NextApiRequest, res: NextApiResponse) => {
+const signIn = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     const response = await axios.post("/auth/signin", req.body);
 
@@ -31,18 +31,31 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
       sameSite: "strict",
       path: "/",
     });
-    
+
     res.json(response.data);
   } catch (error: any) {
     res.status(401).json({ error: error.message });
   }
-}
+};
 
-function signOut(req: NextApiRequest, res: NextApiResponse) {
+const signOut = (req: NextApiRequest, res: NextApiResponse) => {
   clearCookie(res, [ACCESS_TOKEN_KEY, REFRESH_TOKEN_KEY]);
   res.json({ success: true });
-}
+};
 
-function getSession(req: NextApiRequest, res: NextApiResponse) {
-  return res.end(`GetSession`);
-}
+const getSession = async (req: NextApiRequest, res: NextApiResponse) => {
+  try {
+    const cookies = cookie.parse(req.headers.cookie || "");
+    const accessToken = cookies[ACCESS_TOKEN_KEY];
+    if (accessToken) {
+      const response = await axios.get("/profile", {
+        headers: { Authorization: `Bearer ${accessToken}` },
+      });
+      res.json(response.data);
+    } else {
+      throw new Error("no access token");
+    }
+  } catch (error: any) {
+    res.status(401).json({ error: error.message });
+  }
+};

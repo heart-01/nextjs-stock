@@ -3,6 +3,7 @@ import Layout from "@/components/layouts/Layout";
 import { useSelector } from "react-redux";
 import { setTestUser, clearUser, signUp, userSelector } from "@/store/slices/userSlice";
 import { useAppDispatch } from "@/store/store";
+import withAuth from "@/hoc/withAuth";
 
 type Props = {};
 
@@ -17,4 +18,4 @@ const Index = ({}: Props) => {
   );
 };
 
-export default Index;
+export default withAuth(Index);

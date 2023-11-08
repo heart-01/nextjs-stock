@@ -23,6 +23,7 @@
       "@/libs/*": ["src/libs/*"],
       "@/enums/*": ["src/enums/*"],
       "@/constants/*": ["src/constants/*"],
+      "@/hoc/*": ["src/hoc/*"],
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
