@@ -1,9 +1,10 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { useSelector } from "react-redux";
 import { useRouter } from "next/router";
 
-import { getSession, isAuthenticatedSelector, isAuthenticatingSelector } from "@/store/slices/userSlice";
 import { useAppDispatch } from "@/store/store";
+import { getSession } from "@/store/actions/userAction";
+import { isAuthenticatedSelector, isAuthenticatingSelector } from "@/store/slices/userSlice";
 
 const isClient = () => typeof window !== "undefined"; // check if window is defined, meaning we are on the client
 

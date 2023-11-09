@@ -5,7 +5,7 @@ import { TextField } from "formik-material-ui";
 import { Box, Button, Card, CardContent, CardMedia } from "@mui/material";
 import { useRouter } from "next/router";
 import { useAppDispatch } from "@/store/store";
-import { signUp } from "@/store/slices/userSlice";
+import { signUp } from "@/store/actions/userAction";
 
 const GlobalStyle = createGlobalStyle`
   body {

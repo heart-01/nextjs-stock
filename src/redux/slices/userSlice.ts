@@ -1,9 +1,7 @@
-import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "@/store/store";
-import { signInParams, signUpParams, userInfo, authService } from "@/services/authenticationAPI";
-import axios from "src/libs/axios";
-import { isEmpty } from "lodash";
-import { AxiosRequestConfig } from "axios";
+import { userInfo } from "@/services/authenticationAPI";
+import { signIn, signUp, signOut, getSession } from "@/store/actions/userAction";
 
 interface IUserState {
   username?: string;
@@ -21,47 +19,6 @@ const initialState: IUserState = {
   isAuthenticated: false,
   isAuthenticating: true,
 };
-
-// config async actions
-export const signUp = createAsyncThunk("user/signUp", async (user: signUpParams) => {
-  return await authService.signUp(user);
-});
-
-export const signIn = createAsyncThunk("user/signIn", async (user: signInParams) => {
-  const response = await authService.signIn(user);
-  if (isEmpty(response.data.token)) {
-    throw new Error("signin failed");
-  }
-
-  // set access token
-  axios.interceptors.request.use((config?: AxiosRequestConfig | any) => {
-    if (config && config.headers) {
-      config.headers["Authorization"] = `Bearer ${response.data.token}`;
-    }
-    return config;
-  });
-
-  return response;
-});
-
-export const signOut = createAsyncThunk("user/signOut", async () => {
-  await authService.signOut();
-});
-
-export const getSession = createAsyncThunk("user/fetchSession", async () => {
-  const response = await authService.getSession();
-
-  // set access token
-  if (response) {
-    axios.interceptors.request.use((config?: AxiosRequestConfig | any) => {
-      if (config && config.headers) {
-        config.headers["Authorization"] = `Bearer ${response.data.token}`;
-      }
-      return config;
-    });
-  }
-  return response;
-});
 
 const userSlice = createSlice({
   name: "user",

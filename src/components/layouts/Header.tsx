@@ -8,7 +8,7 @@ import MenuIcon from "@mui/icons-material/Menu";
 import { Badge, Box, Menu, MenuItem } from "@mui/material";
 import { Mail, Notifications, AccountCircle } from "@mui/icons-material";
 import { useAppDispatch } from "@/store/store";
-import { signOut } from "@/store/slices/userSlice";
+import { signOut } from "@/store/actions/userAction";
 import { useRouter } from "next/router";
 
 const drawerWidth = 240;
