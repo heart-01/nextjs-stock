@@ -3,12 +3,12 @@ import Layout from "@/components/layouts/Layout";
 
 type Props = {};
 
-const Report = (props: Props) => {
+const Aboutus = (props: Props) => {
   return (
     <Layout>
-      <div>report</div>
+      <div>aboutus</div>
     </Layout>
   );
 };
 
-export default Report;
+export default Aboutus;

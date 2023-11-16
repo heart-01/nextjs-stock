@@ -15,6 +15,9 @@ import MailIcon from "@mui/icons-material/Mail";
 import { blue } from "@mui/material/colors";
 import { Stack } from "@mui/material";
 import Image from "next/image";
+import Link from "next/link";
+import { useRouter } from "next/router";
+import { BarChart, Layers, Person } from "@mui/icons-material";
 
 const drawerWidth = 240;
 
@@ -70,6 +73,7 @@ type MenuProps = {
 
 const Menu = ({ open, onDrawerClose }: MenuProps) => {
   const theme = useTheme();
+  const router = useRouter();
 
   return (
     <Drawer variant="permanent" open={open}>
@@ -81,28 +85,35 @@ const Menu = ({ open, onDrawerClose }: MenuProps) => {
       </DrawerHeader>
       <Divider />
       <List>
-        {["Inbox", "Starred", "Send email", "Drafts"].map((text, index) => (
-          <ListItem key={text} disablePadding sx={{ display: "block" }}>
-            <ListItemButton
-              sx={{
-                minHeight: 48,
-                justifyContent: open ? "initial" : "center",
-                px: 2.5,
-              }}
-            >
-              <ListItemIcon
-                sx={{
-                  minWidth: 0,
-                  mr: open ? 3 : "auto",
-                  justifyContent: "center",
-                }}
-              >
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-              </ListItemIcon>
-              <ListItemText primary={text} sx={{ opacity: open ? 1 : 0 }} />
-            </ListItemButton>
+        {/* Stock */}
+        <Link href="/stock" passHref>
+          <ListItem button className={router.pathname === "/stock" ? "Mui-selected" : ""}>
+            <ListItemIcon>
+              <Layers />
+            </ListItemIcon>
+            <ListItemText primary="Stock" />
           </ListItem>
-        ))}
+        </Link>
+
+        {/* Report */}
+        <Link href="/report" passHref>
+          <ListItem button className={router.pathname === "/report" ? "Mui-selected" : ""}>
+            <ListItemIcon>
+              <BarChart />
+            </ListItemIcon>
+            <ListItemText primary="Report" />
+          </ListItem>
+        </Link>
+
+        {/* Aboutus */}
+        <Link href="/aboutus" passHref>
+          <ListItem button className={router.pathname === "/aboutus" ? "Mui-selected" : ""}>
+            <ListItemIcon>
+              <Person />
+            </ListItemIcon>
+            <ListItemText primary="About us" />
+          </ListItem>
+        </Link>
       </List>
       <Divider />
       <List>
