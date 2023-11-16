@@ -25,7 +25,7 @@ const Layout = ({ children }: LayoutProps) => {
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
       <Header open={open} onDrawerOpen={() => setOpen(true)} />
-      <Menu open={open} onDrawerOpen={() => setOpen(false)} />
+      <Menu open={open} onDrawerClose={() => setOpen(false)} />
       <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
         <DrawerHeader />
         {children}
