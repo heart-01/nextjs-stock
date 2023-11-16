@@ -6,6 +6,7 @@ import { Box, Button, Card, CardContent, CardMedia } from "@mui/material";
 import { useRouter } from "next/router";
 import { useAppDispatch } from "@/store/store";
 import { signUp } from "@/store/actions/userAction";
+import withAuth from "@/hoc/withAuth";
 
 const GlobalStyle = createGlobalStyle`
   body {
@@ -74,7 +75,7 @@ const SignUp = ({}: Props) => {
   );
 };
 
-export default SignUp;
+export default withAuth(SignUp);
 
 /* HTML Form integrated with Formik
 <Formik

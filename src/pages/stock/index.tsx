@@ -1,7 +1,7 @@
 import React from "react";
 import Layout from "@/components/layouts/Layout";
 import { useSelector } from "react-redux";
-import { setTestUser, clearUser, signUp, userSelector } from "@/store/slices/userSlice";
+import { setTestUser, clearUser, userSelector } from "@/store/slices/userSlice";
 import { useAppDispatch } from "@/store/store";
 import withAuth from "@/hoc/withAuth";
 
