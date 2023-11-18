@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Layout from "@/components/layouts/Layout";
 import { useAppDispatch } from "@/store/store";
 import withAuth from "@/hoc/withAuth";
 import { DataGrid, GridColDef, GridValueGetterParams } from "@mui/x-data-grid";
 import { Box } from "@mui/material";
+import { getProducts } from "@/store/actions/productAction";
 
 const columns: GridColDef[] = [
   { field: "id", headerName: "ID", width: 90 },
@@ -52,6 +53,10 @@ type Props = {};
 
 const Index = ({}: Props) => {
   const dispatch = useAppDispatch();
+  
+  React.useEffect(() => {
+    dispatch(getProducts());
+  }, [dispatch]);
 
   return (
     <Layout>

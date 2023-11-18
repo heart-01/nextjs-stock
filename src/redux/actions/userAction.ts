@@ -15,14 +15,6 @@ export const signIn = createAsyncThunk("user/signIn", async (user: signInParams)
     throw new Error("signin failed");
   }
 
-  // set access token
-  axios.interceptors.request.use((config?: AxiosRequestConfig | any) => {
-    if (config && config.headers) {
-      config.headers["Authorization"] = `Bearer ${response.data.token}`;
-    }
-    return config;
-  });
-
   return response;
 });
 
