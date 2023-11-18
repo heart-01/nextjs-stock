@@ -2,59 +2,56 @@ import React, { useEffect } from "react";
 import Layout from "@/components/layouts/Layout";
 import { useAppDispatch } from "@/store/store";
 import withAuth from "@/hoc/withAuth";
-import { DataGrid, GridColDef, GridValueGetterParams } from "@mui/x-data-grid";
+import { DataGrid, GridColDef, GridRenderCellParams } from "@mui/x-data-grid";
 import { Box } from "@mui/material";
 import { getProducts } from "@/store/actions/productAction";
+import { productSelector } from "@/store/slices/productSlice";
+import { useSelector } from "react-redux";
+import Image from "next/image";
+import { isEmpty } from "lodash";
 
-const columns: GridColDef[] = [
+const productColumns: GridColDef[] = [
   { field: "id", headerName: "ID", width: 90 },
   {
-    field: "firstName",
-    headerName: "First name",
+    field: "name",
+    headerName: "Name",
     width: 150,
-    editable: true,
+    editable: false,
   },
   {
-    field: "lastName",
-    headerName: "Last name",
+    disableColumnMenu: true,
+    headerName: "IMG",
+    field: "image",
+    width: 80,
+    renderCell: ({ value }: GridRenderCellParams) => {
+      if (isEmpty(value)) {
+        return <Box>-</Box>;
+      } else {
+        return <Image height={500} width={500} alt="product image" src={value} style={{ width: 70, height: 70, borderRadius: "5%" }} />;
+      }
+    },
+  },
+  {
+    field: "price",
+    headerName: "Price",
     width: 150,
-    editable: true,
+    editable: false,
   },
   {
-    field: "age",
-    headerName: "Age",
-    type: "number",
-    width: 110,
-    editable: true,
+    field: "stock",
+    headerName: "Stock",
+    width: 150,
+    editable: false,
   },
-  {
-    field: "fullName",
-    headerName: "Full name",
-    description: "This column has a value getter and is not sortable.",
-    sortable: false,
-    width: 160,
-    valueGetter: (params: GridValueGetterParams) => `${params.row.firstName || ""} ${params.row.lastName || ""}`,
-  },
-];
-
-const rows = [
-  { id: 1, lastName: "Snow", firstName: "Jon", age: 35 },
-  { id: 2, lastName: "Lannister", firstName: "Cersei", age: 42 },
-  { id: 3, lastName: "Lannister", firstName: "Jaime", age: 45 },
-  { id: 4, lastName: "Stark", firstName: "Arya", age: 16 },
-  { id: 5, lastName: "Targaryen", firstName: "Daenerys", age: null },
-  { id: 6, lastName: "Melisandre", firstName: null, age: 150 },
-  { id: 7, lastName: "Clifford", firstName: "Ferrara", age: 44 },
-  { id: 8, lastName: "Frances", firstName: "Rossini", age: 36 },
-  { id: 9, lastName: "Roxie", firstName: "Harvey", age: 65 },
 ];
 
 type Props = {};
 
 const Index = ({}: Props) => {
   const dispatch = useAppDispatch();
-  
-  React.useEffect(() => {
+  const productsList = useSelector(productSelector);
+
+  useEffect(() => {
     dispatch(getProducts());
   }, [dispatch]);
 
@@ -62,8 +59,8 @@ const Index = ({}: Props) => {
     <Layout>
       <Box sx={{ height: 400, width: "100%" }}>
         <DataGrid
-          rows={rows}
-          columns={columns}
+          rows={productsList ?? []}
+          columns={productColumns}
           initialState={{
             pagination: {
               paginationModel: {

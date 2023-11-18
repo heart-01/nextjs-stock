@@ -3,7 +3,7 @@ import axios from "@/libs/axios";
 export interface IResponseProduct {
   id: number;
   name: string;
-  image?: string;
+  image?: string | null;
   price: number;
   stock: number;
   createdAt: Date;
@@ -22,6 +22,10 @@ const getProductById = async (id: string) => {
   return (await axios.get(`/product/${id}`)).data;
 };
 
+const getImageProduct = async (image: string) => {
+  return (await axios.get(`/product/image/${image}`, { responseType: "arraybuffer" })).data;
+};
+
 const createProduct = async (data: FormData): Promise<void> => {
   return await axios.post(`/product`, data);
 };
@@ -37,6 +41,7 @@ const deleteProduct = async (id?: string): Promise<void> => {
 export const productService = {
   getProducts,
   getProductById,
+  getImageProduct,
   createProduct,
   editProduct,
   deleteProduct,
