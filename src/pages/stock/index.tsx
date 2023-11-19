@@ -9,6 +9,8 @@ import { productSelector } from "@/store/slices/productSlice";
 import { useSelector } from "react-redux";
 import Image from "next/image";
 import { isEmpty } from "lodash";
+import Zoom from "react-medium-image-zoom";
+import "react-medium-image-zoom/dist/styles.css";
 
 const productColumns: GridColDef[] = [
   { field: "id", headerName: "ID", width: 90 },
@@ -27,7 +29,11 @@ const productColumns: GridColDef[] = [
       if (isEmpty(value)) {
         return <Box>-</Box>;
       } else {
-        return <Image height={500} width={500} alt="product image" src={value} style={{ width: 70, height: 70, borderRadius: "5%" }} />;
+        return (
+          <Zoom>
+            <Image height={500} width={500} alt="product image" src={value} style={{ width: 70, height: 70, borderRadius: "5%" }} />
+          </Zoom>
+        );
       }
     },
   },
