@@ -24,8 +24,12 @@ export const useRenderDialog = (props: Props) => {
     selectedProduct && (
       <Dialog open={isOpenDialog} keepMounted aria-labelledby="alert-dialog-slide-title" aria-describedby="alert-dialog-slide-description">
         <DialogTitle id="alert-dialog-slide-title">
-          {selectedProduct.image && <Image width={100} height={100} objectFit="cover" alt="product image" src={selectedProduct.image} style={{ width: 100, borderRadius: "5%" }} />}
-          <br />
+          {selectedProduct.image && (
+            <>
+              <Image width={100} height={100} objectFit="cover" alt="product image" src={selectedProduct.image} style={{ width: 100, borderRadius: "5%" }} />
+              <br />
+            </>
+          )}
           Confirm to delete the product? : {selectedProduct.name}
         </DialogTitle>
         <DialogContent>
