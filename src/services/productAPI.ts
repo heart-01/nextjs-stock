@@ -6,8 +6,8 @@ export interface IResponseProduct {
   image?: string | null;
   price: number;
   stock: number;
-  createdAt: Date;
-  updatedAt: Date;
+  created: Date;
+  updated: Date;
 }
 
 const getProducts = async (keyword?: string): Promise<IResponseProduct[]> => {
