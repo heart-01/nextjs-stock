@@ -1,16 +1,21 @@
 import axios from "@/libs/axios";
 
 export interface IResponseProduct {
-  id: number;
-  name: string;
-  image?: string | null;
-  price: number;
-  stock: number;
-  created: Date;
-  updated: Date;
+  data: {
+    id: string;
+    name: string;
+    price: number;
+    image: string;
+    description: string;
+    createdAt: string;
+    updatedAt: string;
+  }[];
+  total: number;
+  limit: number;
+  page: number;
 }
 
-const getProducts = async (keyword?: string): Promise<IResponseProduct[]> => {
+const getProducts = async (keyword?: string): Promise<IResponseProduct> => {
   if (keyword) {
     return (await axios.get(`/product?name=${keyword}`)).data;
   } else {

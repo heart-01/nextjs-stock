@@ -5,7 +5,7 @@ import { store } from "../store";
 export const getProducts = createAsyncThunk("product/get", async (keyword?: string) => {
   const productList = await productService.getProducts(keyword);
   const productWithImageBlob = [];
-  for (const product of productList) {
+  for (const product of productList.data) {
     if (product.image) {
       const arrayBuffer = await productService.getImageProduct(product.image);
       const blob = new Blob([arrayBuffer]);
@@ -16,7 +16,12 @@ export const getProducts = createAsyncThunk("product/get", async (keyword?: stri
       ...product,
     });
   }
-  return productWithImageBlob;
+  return {
+    data: productWithImageBlob,
+    total: productList.total,
+    limit: productList.limit,
+    page: productList.page,
+  };
 });
 
 export const deleteProduct = createAsyncThunk("product/delete", async (id: string) => {

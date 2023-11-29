@@ -4,11 +4,16 @@ import { IResponseProduct } from "@/services/productAPI";
 import { getProducts } from "../actions/productAction";
 
 type ProductState = {
-  all: IResponseProduct[];
+  all: IResponseProduct;
 };
 
 const initialState: ProductState = {
-  all: [],
+  all: {
+    data: [],
+    total: 0,
+    limit: 0,
+    page: 0,
+  },
 };
 
 const productSlice = createSlice({
@@ -17,13 +22,16 @@ const productSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder.addCase(getProducts.fulfilled, (state, action) => {
-      state.all = action.payload;
+      state.all.data = action.payload.data;
+      state.all.total = action.payload.total;
+      state.all.limit = action.payload.limit;
+      state.all.page = action.payload.page;
     });
   },
 });
 
 // export common product selector
-export const productSelector = (store: RootState) => store.product.all;
+export const productSelector = (store: RootState) => store.product.all.data;
 
 // export reducer
 export default productSlice.reducer;
