@@ -23,7 +23,7 @@ const withAuth = (WrappedComponent: React.FC) => (props: any) => {
     if (route !== "/signIn" && route !== "/signUp") {
       if (!isAuthenticated) {
         router.push(`/signIn`);
-      } else if (route == "/") {
+      } else if (route === "/") {
         router.push(`/stock`); // default page after login when call root path
       }
     } else {
