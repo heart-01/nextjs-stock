@@ -1,11 +1,19 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from "@mui/material";
-import { IResponseProduct } from "@/services/productAPI";
 import { useAppDispatch } from "@/store/store";
 import { deleteProduct } from "@/store/actions/productAction";
 
-type ProductData = IResponseProduct;
+type ProductData = {
+  id: number;
+  name: string;
+  image: string;
+  price: number;
+  stock: number;
+  description: string;
+  createdAt: string;
+  updatedAt: string;
+}
 type Props = {};
 
 export const useRenderDialog = (props: Props) => {
