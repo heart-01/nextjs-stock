@@ -31,7 +31,8 @@ const productSlice = createSlice({
 });
 
 // export common product selector
-export const productSelector = (store: RootState) => store.product.all.data;
+export const productListSelector = (store: RootState) => store.product.all.data;
+export const productAllTotalSelector = (store: RootState) => store.product.all.total;
 
 // export reducer
 export default productSlice.reducer;

@@ -2,8 +2,8 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import { productService } from "@/services/productAPI";
 import { store } from "../store";
 
-export const getProducts = createAsyncThunk("product/get", async (keyword?: string) => {
-  const productList = await productService.getProducts(keyword);
+export const getProducts = createAsyncThunk("product/get", async (options: { keyword?: string; limit: number; page: number }) => {
+  const productList = await productService.getProducts(options);
   const productWithImageBlob = [];
   for (const product of productList.data) {
     if (product.image) {
@@ -26,5 +26,5 @@ export const getProducts = createAsyncThunk("product/get", async (keyword?: stri
 
 export const deleteProduct = createAsyncThunk("product/delete", async (id: string) => {
   await productService.deleteProduct(id);
-  store.dispatch(getProducts());
+  store.dispatch(getProducts({ page: 0, limit: 10 }));
 });

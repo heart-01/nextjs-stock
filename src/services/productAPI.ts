@@ -15,11 +15,11 @@ export interface IResponseProduct {
   page: number;
 }
 
-const getProducts = async (keyword?: string): Promise<IResponseProduct> => {
-  if (keyword) {
-    return (await axios.get(`/product?name=${keyword}`)).data;
+const getProducts = async (options: { keyword?: string; limit: number; page: number }): Promise<IResponseProduct> => {
+  if (options.keyword) {
+    return (await axios.get(`/product?page=${options.page}&limit=${options.limit}&name=${options.keyword}`)).data;
   } else {
-    return (await axios.get(`/product`)).data;
+    return (await axios.get(`/product?page=${options.page}&limit=${options.limit}`)).data;
   }
 };
 
