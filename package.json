@@ -24,6 +24,7 @@
     "formik": "^2.4.5",
     "formik-material-ui": "^4.0.0-alpha.2",
     "lodash": "^4.17.21",
+    "million": "^2.6.4",
     "moment": "^2.29.4",
     "next": "13.5.4",
     "react": "^18",
