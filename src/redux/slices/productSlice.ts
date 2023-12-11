@@ -1,10 +1,21 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { RootState } from "../store";
 import { IResponseProduct } from "@/services/productAPI";
-import { getProducts } from "../actions/productAction";
+import { getProducts, getProductByIds } from "../actions/productAction";
 
 type ProductState = {
   all: IResponseProduct;
+  selected: {
+    data: {
+      id: string;
+      name: string;
+      price: number;
+      image: string;
+      description: string;
+      createdAt: string;
+      updatedAt: string;
+    }[] | {} | undefined;
+  };
 };
 
 const initialState: ProductState = {
@@ -13,6 +24,9 @@ const initialState: ProductState = {
     total: 0,
     limit: 0,
     page: 0,
+  },
+  selected: {
+    data: undefined,
   },
 };
 
@@ -26,6 +40,9 @@ const productSlice = createSlice({
       state.all.total = action.payload.total;
       state.all.limit = action.payload.limit;
       state.all.page = action.payload.page;
+    });
+    builder.addCase(getProductByIds.fulfilled, (state, action) => {
+      state.selected.data = action.payload.data;
     });
   },
 });

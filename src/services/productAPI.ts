@@ -1,4 +1,5 @@
 import axios from "@/libs/axios";
+import queryString from "query-string";
 
 export interface IResponseProduct {
   data: {
@@ -15,16 +16,40 @@ export interface IResponseProduct {
   page: number;
 }
 
-const getProducts = async (options: { keyword?: string; limit: number; page: number }): Promise<IResponseProduct> => {
-  if (options.keyword) {
-    return (await axios.get(`/product?page=${options.page}&limit=${options.limit}&name=${options.keyword}`)).data;
-  } else {
-    return (await axios.get(`/product?page=${options.page}&limit=${options.limit}`)).data;
-  }
+const getProducts = async (options: { name?: string; limit: number; page: number }): Promise<IResponseProduct> => {
+  // if (options.keyword) {
+  //   return (await axios.get(`/product?page=${options.page}&limit=${options.limit}&name=${options.keyword}`)).data;
+  // } else {
+  //   return (await axios.get(`/product?page=${options.page}&limit=${options.limit}`)).data;
+  // }
+
+  return (
+    await axios.get("/product", {
+      params: {
+        ...options,
+      },
+      paramsSerializer: (params) => {
+        return queryString.stringify(params);
+      },
+    })
+  ).data;
 };
 
 const getProductById = async (id: string) => {
   return (await axios.get(`/product/${id}`)).data;
+};
+
+const getProductByIds = async (params: string[]) => {
+  return (
+    await axios.get("/product/query/multiple", {
+      params: {
+        ids: params,
+      },
+      paramsSerializer: (params) => {
+        return queryString.stringify(params);
+      },
+    })
+  ).data;
 };
 
 const getImageProduct = async (image: string) => {
@@ -46,6 +71,7 @@ const deleteProduct = async (id?: string): Promise<void> => {
 export const productService = {
   getProducts,
   getProductById,
+  getProductByIds,
   getImageProduct,
   createProduct,
   editProduct,

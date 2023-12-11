@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useAppDispatch } from "@/store/store";
-import { getProducts } from "@/store/actions/productAction";
+import { getProducts, getProductByIds } from "@/store/actions/productAction";
 import { useSelector } from "react-redux";
 import { productListSelector, productAllTotalSelector } from "@/store/slices/productSlice";
 import { RenderTableProduct } from "@/components/stock/RenderTableProduct";
@@ -22,6 +22,9 @@ const Index = ({}: Props) => {
 
   useEffect(() => {
     dispatch(getProducts({ page: PAGE, limit: PAGE_LIMIT }));
+
+    // test call getProductByIds
+    // dispatch(getProductByIds(["1", "2", "3"]));
   }, [dispatch]);
 
   const handleOnClickTablePagination = (params: any) => {
