@@ -2,7 +2,7 @@ import axios from "@/libs/axios";
 import queryString from "query-string";
 
 export interface IResponseProduct {
-  data: {
+  data: Array<{
     id: string;
     name: string;
     price: number;
@@ -10,7 +10,7 @@ export interface IResponseProduct {
     description: string;
     createdAt: string;
     updatedAt: string;
-  }[];
+  }>;
   total: number;
   limit: number;
   page: number;

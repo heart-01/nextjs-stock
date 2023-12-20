@@ -3,31 +3,29 @@ import { RootState } from "../store";
 import { IResponseProduct } from "@/services/productAPI";
 import { getProducts, getProductByIds } from "../actions/productAction";
 
-type ProductState = {
-  all: IResponseProduct;
-  selected: {
-    data: {
-      id: string;
-      name: string;
-      price: number;
-      image: string;
-      description: string;
-      createdAt: string;
-      updatedAt: string;
-    }[] | {} | undefined;
-  };
-};
+interface Product {
+  id: string;
+  name: string;
+  price: number;
+  image: string;
+  description: string;
+  createdAt: string;
+  updatedAt: string;
+}
 
-const initialState: ProductState = {
+interface IProductState {
+  all: IResponseProduct;
+  selected: Product | Product[] | undefined;
+}
+
+const initialState: IProductState = {
   all: {
     data: [],
     total: 0,
     limit: 0,
     page: 0,
   },
-  selected: {
-    data: undefined,
-  },
+  selected: undefined,
 };
 
 const productSlice = createSlice({
@@ -42,7 +40,7 @@ const productSlice = createSlice({
       state.all.page = action.payload.page;
     });
     builder.addCase(getProductByIds.fulfilled, (state, action) => {
-      state.selected.data = action.payload.data;
+      state.selected = action.payload.data;
     });
   },
 });
