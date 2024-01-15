@@ -24,6 +24,25 @@ export const getProducts = createAsyncThunk("product/get", async (options: { nam
   };
 });
 
+export const getProductById = createAsyncThunk("product/getById", async (id: string) => {
+  const product = await productService.getProductById(id);
+  const productWithImageBlob = [];
+
+  if (product.image) {
+    const arrayBuffer = await productService.getImageProduct(product.image);
+    const blob = new Blob([arrayBuffer]);
+    const objectUrl = URL.createObjectURL(blob);
+    product.image = objectUrl;
+  }
+  productWithImageBlob.push({
+    ...product,
+  });
+
+  return {
+    data: productWithImageBlob,
+  };
+});
+
 export const getProductByIds = createAsyncThunk("product/getByIds", async (params: string[]) => {
   const productList = await productService.getProductByIds(params);
   const productWithImageBlob = [];

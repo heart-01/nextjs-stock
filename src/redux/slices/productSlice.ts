@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { RootState } from "../store";
 import { IResponseProduct } from "@/services/productAPI";
-import { getProducts, getProductByIds } from "../actions/productAction";
+import { getProducts, getProductById, getProductByIds } from "../actions/productAction";
 
 interface Product {
   id: string;
@@ -38,6 +38,9 @@ const productSlice = createSlice({
       state.all.total = action.payload.total;
       state.all.limit = action.payload.limit;
       state.all.page = action.payload.page;
+    });
+    builder.addCase(getProductById.fulfilled, (state, action) => {
+      state.selected = action.payload.data;
     });
     builder.addCase(getProductByIds.fulfilled, (state, action) => {
       state.selected = action.payload.data;
