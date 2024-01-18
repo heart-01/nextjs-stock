@@ -48,7 +48,7 @@ const productSlice = createSlice({
       state.all.page = action.payload.page;
     });
     builder.addCase(getProductById.fulfilled, (state: IProductState, action) => {
-      state.selected = action.payload.data;
+      state.selected = action.payload.data[0];
     });
     builder.addCase(getProductByIds.fulfilled, (state: IProductState, action) => {
       state.selected = action.payload.data;
