@@ -3,7 +3,7 @@ import { RootState } from "../store";
 import { IResponseProduct } from "@/services/productAPI";
 import { getProducts, getProductById, getProductByIds } from "../actions/productAction";
 
-interface Product {
+export interface IProduct {
   id: string;
   name: string;
   price: number;
@@ -15,7 +15,7 @@ interface Product {
 
 interface IProductState {
   all: IResponseProduct;
-  selected: Product | Product[] | undefined;
+  selected: IProduct | IProduct[] | undefined;
 }
 
 const initialState: IProductState = {
@@ -62,6 +62,7 @@ export const { clearProduct } = productSlice.actions;
 // export common product selector
 export const productListSelector = (store: RootState) => store.product.all.data;
 export const productAllTotalSelector = (store: RootState) => store.product.all.total;
+export const productSelectedSelector = (store: RootState) => store.product.selected;
 
 // export reducer
 export default productSlice.reducer;
