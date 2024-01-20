@@ -89,7 +89,17 @@ const Edit = ({}: Props) => {
 
   return (
     <Layout>
-      <Formik initialValues={product} onSubmit={(values, { setSubmitting }) => {}}>
+      <Formik
+        initialValues={product}
+        validate={(values) => {
+          let errors: any = {};
+          if (!values.name) errors.name = "Enter name";
+          if (values.stock < 3) errors.stock = "Min stock is not lower than 3";
+          if (values.price < 3) errors.price = "Min price is not lower than 3";
+          return errors;
+        }}
+        onSubmit={(values, { setSubmitting }) => {}}
+      >
         {(props) => showForm(props)}
       </Formik>
     </Layout>
