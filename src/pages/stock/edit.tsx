@@ -27,6 +27,8 @@ const Edit = ({}: Props) => {
     };
   }, [dispatch]);
 
+  if (!product) return <div>loading</div>;
+
   const showForm = ({ values, setFieldValue, isValid }: FormikProps<any>) => {
     return (
       <Form>
@@ -87,11 +89,9 @@ const Edit = ({}: Props) => {
 
   return (
     <Layout>
-      {product && (
-        <Formik initialValues={product} onSubmit={(values, { setSubmitting }) => {}}>
-          {(props) => showForm(props)}
-        </Formik>
-      )}
+      <Formik initialValues={product} onSubmit={(values, { setSubmitting }) => {}}>
+        {(props) => showForm(props)}
+      </Formik>
     </Layout>
   );
 };
