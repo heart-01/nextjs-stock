@@ -75,7 +75,7 @@ export const RenderTableProduct = (props: Props) => {
     },
     {
       headerName: "TIME",
-      field: "created",
+      field: "updated",
       width: 220,
       renderCell: ({ value }: GridRenderCellParams) => (
         <Typography variant="body1">

@@ -1,5 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { productService } from "@/services/productAPI";
+import { IRequestProduct, productService } from "@/services/productAPI";
 import { store } from "../store";
 
 export const getProducts = createAsyncThunk("product/get", async (options: { name?: string; limit: number; page: number }) => {
@@ -60,6 +60,10 @@ export const getProductByIds = createAsyncThunk("product/getByIds", async (param
   return {
     data: productWithImageBlob,
   };
+});
+
+export const editProduct = createAsyncThunk("user/edit", async ({ id, product }: { id: string; product: IRequestProduct }) => {
+  return await productService.editProduct(id, product);
 });
 
 export const deleteProduct = createAsyncThunk("product/delete", async (id: string) => {

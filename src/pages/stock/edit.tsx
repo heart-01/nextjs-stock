@@ -1,22 +1,23 @@
 import React, { useEffect } from "react";
 import { useRouter } from "next/router";
 import { useAppDispatch } from "@/store/store";
-import { getProductById } from "@/store/actions/productAction";
-import { IProduct, clearProduct, productSelectedSelector } from "@/store/slices/productSlice";
+import { editProduct, getProductById } from "@/store/actions/productAction";
+import { clearProduct, productSelectedSelector } from "@/store/slices/productSlice";
 import withAuth from "@/hoc/withAuth";
 import Layout from "@/components/layouts/Layout";
-import { Field, Form, Formik, FormikProps } from "formik";
+import { Field, Form, Formik, FormikHelpers, FormikProps } from "formik";
 import { useSelector } from "react-redux";
 import { Button, Card, CardActions, CardContent, Typography } from "@mui/material";
 import { TextField } from "formik-material-ui";
 import Image from "next/image";
+import { IRequestProduct } from "@/services/productAPI";
 
 type Props = {};
 
 const Edit = ({}: Props) => {
   const router = useRouter();
   const dispatch = useAppDispatch();
-  const { id } = router.query;
+  const { id } = router.query as { id: string };
   const product: any = useSelector(productSelectedSelector);
 
   useEffect(() => {
@@ -87,19 +88,30 @@ const Edit = ({}: Props) => {
     }
   };
 
+  const validateFormEdit = (product: IRequestProduct) => {
+    let errors: any = {};
+    if (!product.name) errors.name = "Enter name";
+    if (product.stock < 3) errors.stock = "Min stock is not lower than 3";
+    if (product.price < 3) errors.price = "Min price is not lower than 3";
+    return errors;
+  };
+
+  const handleOnSubmitFormEdit = async (product: IRequestProduct, { setSubmitting }: FormikHelpers<IRequestProduct>) => {
+    let data = new FormData();
+    data.append("name", product.name);
+    data.append("price", String(product.price));
+    data.append("stock", String(product.stock));
+    if (product.file) {
+      data.append("file", product.file);
+    }
+    await dispatch(editProduct({ id, product }));
+    router.push("/stock");
+    setSubmitting(false);
+  };
+
   return (
     <Layout>
-      <Formik
-        initialValues={product}
-        validate={(values) => {
-          let errors: any = {};
-          if (!values.name) errors.name = "Enter name";
-          if (values.stock < 3) errors.stock = "Min stock is not lower than 3";
-          if (values.price < 3) errors.price = "Min price is not lower than 3";
-          return errors;
-        }}
-        onSubmit={(values, { setSubmitting }) => {}}
-      >
+      <Formik initialValues={product} validate={validateFormEdit} onSubmit={handleOnSubmitFormEdit}>
         {(props) => showForm(props)}
       </Formik>
     </Layout>

@@ -1,6 +1,14 @@
 import axios from "@/libs/axios";
 import queryString from "query-string";
 
+export interface IRequestProduct {
+  name: string;
+  price: number;
+  stock: number;
+  file: string | undefined;
+  description: string | undefined;
+}
+
 export interface IResponseProduct {
   data: Array<{
     id: string;
@@ -60,8 +68,8 @@ const createProduct = async (data: FormData): Promise<void> => {
   return await axios.post(`/product`, data);
 };
 
-const editProduct = async (data: FormData): Promise<IResponseProduct> => {
-  return await axios.put(`/product`, data);
+const editProduct = async (id: string, data: IRequestProduct): Promise<IResponseProduct> => {
+  return await axios.patch(`/product/${id}`, data);
 };
 
 const deleteProduct = async (id?: string): Promise<void> => {
