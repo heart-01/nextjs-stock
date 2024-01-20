@@ -62,7 +62,7 @@ export const getProductByIds = createAsyncThunk("product/getByIds", async (param
   };
 });
 
-export const editProduct = createAsyncThunk("user/edit", async ({ id, product }: { id: string; product: IRequestProduct }) => {
+export const editProduct = createAsyncThunk("user/edit", async ({ id, product }: { id: string; product: FormData }) => {
   return await productService.editProduct(id, product);
 });
 

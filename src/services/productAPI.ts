@@ -5,8 +5,8 @@ export interface IRequestProduct {
   name: string;
   price: number;
   stock: number;
-  file: string | undefined;
-  description: string | undefined;
+  file?: string;
+  description?: string;
 }
 
 export interface IResponseProduct {
@@ -68,8 +68,12 @@ const createProduct = async (data: FormData): Promise<void> => {
   return await axios.post(`/product`, data);
 };
 
-const editProduct = async (id: string, data: IRequestProduct): Promise<IResponseProduct> => {
-  return await axios.patch(`/product/${id}`, data);
+const editProduct = async (id: string, data: FormData): Promise<IResponseProduct> => {
+  return await axios.patch(`/product/${id}`, data, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
 };
 
 const deleteProduct = async (id?: string): Promise<void> => {

@@ -32,7 +32,7 @@ const Edit = ({}: Props) => {
 
   const showForm = ({ values, setFieldValue, isValid }: FormikProps<any>) => {
     return (
-      <Form>
+      <Form encType="multipart/form-data">
         <Card>
           <CardContent sx={{ padding: 4 }}>
             <Typography gutterBottom variant="h3">
@@ -51,14 +51,14 @@ const Edit = ({}: Props) => {
               <Image objectFit="cover" alt="product image" src="/static/img/ic_photo.png" width={25} height={20} />
               <span style={{ color: "#00B0CD", marginLeft: 10 }}>Add Picture</span>
 
-              <input
+              <Field
                 type="file"
                 onChange={(e: React.ChangeEvent<any>) => {
                   e.preventDefault();
-                  setFieldValue("file", e.target.files[0]); // for upload
-                  setFieldValue("file_obj", URL.createObjectURL(e.target.files[0])); // for preview image
+                  setFieldValue("file", e.currentTarget.files[0] as HTMLFormElement); // for upload
+                  setFieldValue("previewImage", URL.createObjectURL(e.target.files[0])); // for preview image
                 }}
-                name="image"
+                name="productImage"
                 click-type="type1"
                 multiple
                 accept="image/*"
@@ -81,8 +81,8 @@ const Edit = ({}: Props) => {
   };
 
   const showPreviewImage = (values: any) => {
-    if (values.file_obj) {
-      return <Image objectFit="contain" alt="product image" src={values.file_obj} width={100} height={100} />;
+    if (values.previewImage) {
+      return <Image objectFit="contain" alt="product image" src={values.previewImage} width={100} height={100} />;
     } else if (values.image) {
       return <Image objectFit="contain" alt="product image" src={values.image} width={100} height={100} />;
     }
@@ -97,14 +97,15 @@ const Edit = ({}: Props) => {
   };
 
   const handleOnSubmitFormEdit = async (product: IRequestProduct, { setSubmitting }: FormikHelpers<IRequestProduct>) => {
-    let data = new FormData();
-    data.append("name", product.name);
-    data.append("price", String(product.price));
-    data.append("stock", String(product.stock));
+    let productForm = new FormData();
+    productForm.append("name", product.name);
+    productForm.append("price", String(product.price));
+    productForm.append("stock", String(product.stock));
     if (product.file) {
-      data.append("file", product.file);
+      productForm.append("image", product.file);
     }
-    await dispatch(editProduct({ id, product }));
+
+    await dispatch(editProduct({ id, product: productForm }));
     router.push("/stock");
     setSubmitting(false);
   };
