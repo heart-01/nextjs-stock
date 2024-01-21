@@ -9,6 +9,10 @@ import Layout from "@/components/layouts/Layout";
 import { DataGrid } from "@mui/x-data-grid";
 import { debounce } from "lodash";
 import QuickSearchToolbar from "@/components/stock/QuickSearchToolbar";
+import { Grid } from "@mui/material";
+import StockCard from "@/components/stock/StockCard";
+import { AssignmentReturn, NewReleases, Star } from "@mui/icons-material";
+import Image from "next/image";
 
 const PAGE = 0;
 const PAGE_LIMIT = 10;
@@ -51,6 +55,24 @@ const Index = ({}: Props) => {
 
   return (
     <Layout>
+      <Grid container style={{ marginBottom: 16 }} spacing={7}>
+        <Grid item lg={3} md={6} sm={12}>
+          <StockCard Icon={() => <Image src="/static/img/icon-mui.png" width={40} height={40} objectFit="contain" alt="logo" />} title="TOTAL" subtitle="112 THB" color="#ffeeee" />
+        </Grid>
+
+        <Grid item lg={3} md={6} sm={12}>
+          <StockCard Icon={NewReleases} title="EMPTY" subtitle="9 PCS." color="#f39c12" />
+        </Grid>
+
+        <Grid item lg={3} md={6} sm={12}>
+          <StockCard Icon={AssignmentReturn} title="RETURN" subtitle="1 PCS." color="#dd4b39" />
+        </Grid>
+
+        <Grid item lg={3} md={6} sm={12}>
+          <StockCard Icon={Star} title="LOSS" subtitle="5 PCS." color="#00c0ef" />
+        </Grid>
+      </Grid>
+
       <DataGrid
         sx={{ backgroundColor: "white", height: "70vh" }}
         rows={productsList ?? []}
