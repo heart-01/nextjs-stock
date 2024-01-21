@@ -7,9 +7,8 @@ import { RenderTableProduct } from "@/components/stock/RenderTableProduct";
 import withAuth from "@/hoc/withAuth";
 import Layout from "@/components/layouts/Layout";
 import { DataGrid } from "@mui/x-data-grid";
-import { Box, Input } from "@mui/material";
-import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
 import { debounce } from "lodash";
+import QuickSearchToolbar from "@/components/stock/QuickSearchToolbar";
 
 const PAGE = 0;
 const PAGE_LIMIT = 10;
@@ -33,36 +32,25 @@ const Index = ({}: Props) => {
     // dispatch(getProductByIds(["1", "2", "3"]));
   }, [dispatch]);
 
+  useEffect(() => {
+    loadProductListByNameDebouncer(searchProduct);
+  }, [searchProduct]);
+
   const loadProductListByNameDebouncer = debounce((productName) => {
-    if (productName.length >= 3) {
+    if (productName.length >= 1) {
       dispatch(getProducts({ name: productName, page: PAGE, limit: PAGE_LIMIT }));
     } else if (productName === "") {
       dispatch(getProducts({ page: PAGE, limit: PAGE_LIMIT }));
     }
   }, INPUT_DEBOUNCING_TIME);
 
-  const handleOnChangeInputSearch = (e: ChangeEvent<HTMLInputElement>) => {
-    setSearchProduct(e.target.value);
-    loadProductListByNameDebouncer(e.target.value);
-  };
-
   const handleOnClickTablePagination = (params: any) => {
-    const name = searchProduct;
     setPaginationModel(params);
-    dispatch(getProducts({ name, page: params.page, limit: params.pageSize }));
-  };
-
-  const renderSearchToolbar = () => {
-    return (
-      <Box sx={{ p: 0.5, pb: 0 }}>
-        <Input placeholder="Search..." onChange={handleOnChangeInputSearch} startAdornment={<SearchOutlinedIcon />} />
-      </Box>
-    );
+    dispatch(getProducts({ name: searchProduct, page: params.page, limit: params.pageSize }));
   };
 
   return (
     <Layout>
-      {renderSearchToolbar()}
       <DataGrid
         sx={{ backgroundColor: "white", height: "70vh" }}
         rows={productsList ?? []}
@@ -74,6 +62,18 @@ const Index = ({}: Props) => {
         pageSizeOptions={[10, 20]}
         paginationModel={paginationModel}
         onPaginationModelChange={handleOnClickTablePagination}
+        slots={{ toolbar: QuickSearchToolbar }}
+        slotProps={{
+          toolbar: {
+            value: searchProduct,
+            onChange: (e: ChangeEvent<HTMLInputElement>) => {
+              setSearchProduct(e.target.value);
+            },
+            clearSearch: () => {
+              setSearchProduct("");
+            },
+          },
+        }}
       />
       {renderDialog()}
     </Layout>
