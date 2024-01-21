@@ -21,9 +21,7 @@ const FormProduct = ({ initialValues, handleOnSubmitForm }: Props) => {
       <Form encType="multipart/form-data">
         <Card>
           <CardContent sx={{ padding: 4 }}>
-            <Typography gutterBottom variant="h3">
-              Edit Stock
-            </Typography>
+            <Typography gutterBottom variant="h3">Stock</Typography>
 
             <Field style={{ marginTop: 16 }} fullWidth component={TextField} id="name" name="name" type="text" label="Name" />
             <br />

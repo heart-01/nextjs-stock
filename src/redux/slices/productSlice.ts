@@ -7,8 +7,8 @@ export interface IProduct {
   id: string;
   name: string;
   price: number;
+  stock: number;
   image: string;
-  description: string;
   createdAt: string;
   updatedAt: string;
 }

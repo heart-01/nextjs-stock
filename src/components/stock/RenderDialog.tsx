@@ -3,23 +3,14 @@ import Image from "next/image";
 import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from "@mui/material";
 import { useAppDispatch } from "@/store/store";
 import { deleteProduct } from "@/store/actions/productAction";
+import { IProduct } from "@/store/slices/productSlice";
 
-type ProductData = {
-  id: number;
-  name: string;
-  image: string;
-  price: number;
-  stock: number;
-  description: string;
-  createdAt: string;
-  updatedAt: string;
-}
 type Props = {};
 
 export const useRenderDialog = (props: Props) => {
   const dispatch = useAppDispatch();
   const [isOpenDialog, setIsOpenDialog] = useState<boolean>(false);
-  const [selectedProduct, setSelectedProduct] = React.useState<ProductData | null>(null);
+  const [selectedProduct, setSelectedProduct] = React.useState<IProduct | null>(null);
 
   const handleOnClickDeleteConfirm = () => {
     if (selectedProduct) {
